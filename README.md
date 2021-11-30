@@ -2,6 +2,31 @@
 
 [![Build Test](https://github.com/matteeyao/echo-server/actions/workflows/build-test.yml/badge.svg)](https://github.com/matteeyao/echo-server/actions/workflows/build-test.yml)
 
+From a command prompt, run the `main.go` file
+
+```zsh
+$ go run main.go
+```
+
+This will start the TCP server listening on port 8000
+
+You can specify another port using the `-p` switch
+
+```zsh
+$ go run main.go -p 8080
+```
+
+Or, set the environment variable `PORT`. In Powershell, you would run
+
+```zsh
+$ $env:PORT = 7000
+$ go run main.go
+```
+
+This will start the TCP server on port 7000
+
+Note, if you are on Windows, you will be prompted to allow network access. Select yes.
+
 To determine whether the tests are passing or failing run:
 
 ```zsh
@@ -27,5 +52,7 @@ To complete this tutorial, you'll need the following:
 * [Go Version 1.17](https://golang.org/dl/) or higher installed on your local machine. You can follow these instructions to install Go on [Linux](https://www.digitalocean.com/community/tutorials/how-to-install-go-and-set-up-a-local-programming-environment-on-ubuntu-18-04), [macOS](https://www.digitalocean.com/community/tutorials/how-to-install-go-and-set-up-a-local-programming-environment-on-macos) and [Windows](https://www.digitalocean.com/community/tutorials/how-to-install-go-and-set-up-a-local-programming-environment-on-windows-10). On macOS, you can also install Go using the [Homebrew package manager](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-homebrew-on-macos).
 
 ## Resources
+
+* [The Go Programming Language](https://learning.oreilly.com/library/view/the-go-programming/9780134190570/) By Alan A. A. Donovan, Brian W. Kernighan
 
 * [Setting up Github actions](https://medium.com/swlh/setting-up-github-actions-for-go-project-ea84f4ed3a40)
