@@ -8,13 +8,13 @@ import (
 	"sync"
 )
 
-func echo(c net.Conn, body string, wg sync.WaitGroup) {
+func echo(c net.Conn, body string, wg *sync.WaitGroup) {
 	fmt.Fprintln(c, "\t", body)
 	wg.Done()
 }
 
 func handleConn(c net.Conn) {
-	wg := sync.WaitGroup{}
+	wg := &sync.WaitGroup{}
 	input := bufio.NewScanner(c)
 	for input.Scan() {
 		wg.Add(1)
