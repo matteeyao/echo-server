@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	addr, err := net.ResolveTCPAddr("tcp", "localhost:8000")
+	addr, err := net.ResolveTCPAddr("tcp", "localhost:8080")
 	if err != nil {
 		log.Fatal(err)
 	}
