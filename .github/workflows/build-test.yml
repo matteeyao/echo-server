@@ -58,6 +58,6 @@ jobs:
         with:
           ruby-version: 2.5.1
       - name: Install dependencies
-        run: bundle install
+        run: cd http_server_spec && bundle install
       - name: Run tests
-        run: bundle exec rake test:f1
+        run: cd http_server_spec && bundle exec rake test:f1
