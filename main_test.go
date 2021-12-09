@@ -15,7 +15,6 @@ var addTests = []addTest{
 
 }
 
-
 func TestAdd(t *testing.T){
 
 	for _, test := range addTests{
