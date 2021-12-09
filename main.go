@@ -9,3 +9,7 @@ func Add(x, y int) (res int) {
 func Subtract(x, y int) (res int) {
 	return x - y
 }
+
+func main() {
+
+}
