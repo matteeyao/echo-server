@@ -63,6 +63,8 @@ jobs:
         with:
           ruby-version: 2.5.1
           bundler-cache: true
+          bundler: default
+          working-directory: ./http_server_spec
       - name: Install dependencies
         run: bundle install
       - name: Run tests
