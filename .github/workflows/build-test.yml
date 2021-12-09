@@ -50,19 +50,20 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./http_server_spec
+
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@477b21f02be01bcb8030d50f37cfec92bfa615b6
-        working-directory: ./http_server_spec
         with:
           ruby-version: 2.5.1
           bundler-cache: true
       - name: Install dependencies
-        working-directory: ./http_server_spec
         run: bundle install
       - name: Run tests
-        working-directory: ./http_server_spec
         run: bundle exec rake test:f1
