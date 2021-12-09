@@ -62,8 +62,6 @@ jobs:
           bundler: default
           working-directory: ./http_server_spec
       - name: Install dependencies
-        working-directory: ./http_server_spec
-        run: bundle install
+        run: cd ./ && bundle install
       - name: Run tests
-        working-directory: ./http_server_spec
-        run: bundle exec rake test:f1
+        run: cd ./ && bundle exec rake test:f1
