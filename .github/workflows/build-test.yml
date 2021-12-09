@@ -56,10 +56,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          working-directory: ./http_server_spec
       - name: Set up Ruby
         uses: ruby/setup-ruby@477b21f02be01bcb8030d50f37cfec92bfa615b6
         with:
+          # Not needed with a .ruby-version file
           ruby-version: 2.5.1
+          # Runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
           working-directory: ./http_server_spec
       - name: Install dependencies
