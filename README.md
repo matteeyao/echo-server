@@ -1,4 +1,4 @@
-# Echo Server
+# HTTP Server
 
 [![Build Test](https://github.com/matteeyao/echo-server/actions/workflows/build-test.yml/badge.svg)](https://github.com/matteeyao/echo-server/actions/workflows/build-test.yml)
 
