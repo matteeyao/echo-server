@@ -8,25 +8,6 @@ From a command prompt, run the `main.go` file
 $ go run main.go
 ```
 
-This will start the TCP server listening on port 8000
-
-You can specify another port using the `-p` switch
-
-```zsh
-$ go run main.go -p 8080
-```
-
-Or, set the environment variable `PORT`. In Powershell, you would run
-
-```zsh
-$ $env:PORT = 7000
-$ go run main.go
-```
-
-This will start the TCP server on port 7000
-
-Note, if you are on Windows, you will be prompted to allow network access. Select yes.
-
 To determine whether the tests are passing or failing run:
 
 ```zsh
