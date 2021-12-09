@@ -1,2 +1,0 @@
-# Basic HTTP Server
-
