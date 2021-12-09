@@ -51,10 +51,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./http_server_spec
-
     steps:
       - uses: actions/checkout@v2
 
@@ -66,6 +62,8 @@ jobs:
           bundler: default
           working-directory: ./http_server_spec
       - name: Install dependencies
+        working-directory: ./http_server_spec
         run: bundle install
       - name: Run tests
+        working-directory: ./http_server_spec
         run: bundle exec rake test:f1
