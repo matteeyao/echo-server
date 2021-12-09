@@ -54,7 +54,6 @@ jobs:
       run:
         working-directory: ./http_server_spec
 
-
     steps:
       - uses: actions/checkout@v2
 
@@ -64,6 +63,8 @@ jobs:
           ruby-version: 2.5.1
           bundler-cache: true
       - name: Install dependencies
+        working-directory: ./http_server_spec
         run: bundle install
       - name: Run tests
+        working-directory: ./http_server_spec
         run: bundle exec rake test:f1
