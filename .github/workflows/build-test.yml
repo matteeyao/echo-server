@@ -56,10 +56,10 @@ jobs:
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@477b21f02be01bcb8030d50f37cfec92bfa615b6
+        working-directory: ./http_server_spec
         with:
           ruby-version: 2.5.1
           bundler-cache: true
-        working-directory: ./http_server_spec
       - name: Install dependencies
         working-directory: ./http_server_spec
         run: bundle install
