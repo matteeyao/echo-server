@@ -58,7 +58,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ssh-key: ${{ secrets.SUBMODULE_CONTENT_PULL_KEY }}
+          repository: yourPrivateOrg/yourPrivateRepo
+          token: ${{ secrets.ACCESS_TOKEN }}
           submodules: recursive
       - name: Set up Ruby
         uses: ruby/setup-ruby@477b21f02be01bcb8030d50f37cfec92bfa615b6
