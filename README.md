@@ -32,7 +32,7 @@ Run the following command to calculate the coverage for your current unit tests:
 $ go test -coverprofile=coverage.out
 ```
 
-# HTTP Server Specs
+## HTTP Server Specs
 
 The specifications of this HTTP server are covered in the integration tests within the `http_server_spec` submodule
 
