@@ -74,6 +74,6 @@ jobs:
       - name: Install dependencies
         working-directory: ./http_server_spec
         run: bundle install
-#      - name: Run tests
-#        run: bundle exec rake test:f1
-#        working-directory: ./http_server_spec
+      - name: Run tests
+        working-directory: ./http_server_spec
+        run: bundle exec rake test:f1
