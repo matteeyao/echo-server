@@ -44,7 +44,7 @@ func handleConn(c net.Conn) {
 }
 
 func main() {
-	ln, err := net.Listen("tcp", "localhost:8080")
+	ln, err := net.Listen("tcp", "localhost:5000")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -77,8 +77,8 @@ func TestEchoRequestBody(t *testing.T) {
 		t.Fatalf("Unexpected message:\nGot:\t\t%s\nExpected:\t%s\n", actual, testPhraseInBytes)
 		ClearTestBuffer()
 	}
-	return
 	ClearTestBuffer()
+	return
 }
 
 func TestConn(t *testing.T) {
