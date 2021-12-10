@@ -2,13 +2,19 @@
 
 [![Build Test](https://github.com/matteeyao/echo-server/actions/workflows/build-test.yml/badge.svg)](https://github.com/matteeyao/echo-server/actions/workflows/build-test.yml)
 
-From a command prompt, run the `main.go` file
+From a command prompt, run the `main.go` file using the command:
 
 ```zsh
 $ go run main.go
 ```
 
-To determine whether the tests are passing or failing run:
+or
+
+```zsh
+$ go run .
+```
+
+To determine whether the unit tests are passing or failing run:
 
 ```zsh
 $ go test
@@ -24,6 +30,39 @@ Run the following command to calculate the coverage for your current unit tests:
 
 ```zsh
 $ go test -coverprofile=coverage.out
+```
+
+# HTTP Server Specs
+
+The specifications of this HTTP server are covered in the integration tests within the `http_server_spec` submodule
+
+1. In the root directory run:
+
+```zsh
+go run .
+```
+
+This will run the server on port 5000
+
+2. Next, `cd` into the `http_server_spec` directory:
+
+```zsh
+cd http_server_spec
+```
+
+3. Once the server is running, you can run the acceptance test suite with:
+
+```zsh
+rake test
+```
+
+You can also run the tests from a specific section of the features:
+
+```zsh
+rake test:f1 # Run all of the tests in 01_getting_started
+rake test:f2 # Run all of the tests in 02_structured_data
+rake test:f3 # Run all of the tests in 03_file_server
+rake test:f4 # Run all of the tests in 04_todo_list
 ```
 
 ## Dependencies
