@@ -51,10 +51,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./
+
     steps:
       - uses: actions/checkout@v2
         with:
-          working-directory: ./
           repository: matteeyao/http-server
           submodules: recursive
       - name: Set up Ruby
