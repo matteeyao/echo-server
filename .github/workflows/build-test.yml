@@ -12,63 +12,63 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # The "build" workflow
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Setup Go
-      - name: Setup Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: '1.17.2' # The Go version to download (if necessary) and use.
-
-      # Install all the dependencies
-      - name: Install dependencies
-        run: |
-          go version
-          go get -u golang.org/x/lint/golint
-
-      # Run build of the application
-      - name: Run build
-        run: go build .
-
-      # Run vet & lint on the code
-      - name: Run vet & lint
-        run: |
-          go vet .
-          golint .
-
-      # Run testing on the code
-      - name: Run testing
-        run: cd ./ && go test -v
-
-#  test:
+#  # The "build" workflow
+#  build:
+#    # The type of runner that the job will run on
 #    runs-on: ubuntu-latest
 #
-#    defaults:
-#      run:
-#        working-directory: ./
-#
+#    # Steps represent a sequence of tasks that will be executed as part of the job
 #    steps:
+#      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
 #      - uses: actions/checkout@v2
+#
+#      # Setup Go
+#      - name: Setup Go
+#        uses: actions/setup-go@v2
 #        with:
-#          repository: matteeyao/http-server
-#          submodules: recursive
-#      - name: Set up Ruby
-#        uses: ruby/setup-ruby@477b21f02be01bcb8030d50f37cfec92bfa615b6
-#        with:
-#          # Not needed with a .ruby-version file
-#          ruby-version: 2.5.1
-#          # Runs 'bundle install' and caches installed gems automatically
-#          bundler-cache: true
+#          go-version: '1.17.2' # The Go version to download (if necessary) and use.
+#
+#      # Install all the dependencies
 #      - name: Install dependencies
-#        run: bundle install
+#        run: |
+#          go version
+#          go get -u golang.org/x/lint/golint
+#
+#      # Run build of the application
+#      - name: Run build
+#        run: go build .
+#
+#      # Run vet & lint on the code
+#      - name: Run vet & lint
+#        run: |
+#          go vet .
+#          golint .
+#
+#      # Run testing on the code
+#      - name: Run testing
+#        run: cd ./ && go test -v
+
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.SUBMODULE_CONTENT_PULL_KEY }}
+          submodules: recursive
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@477b21f02be01bcb8030d50f37cfec92bfa615b6
+        with:
+          # Not needed with a .ruby-version file
+          ruby-version: 2.5.1
+          # Runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true
+      - name: Install dependencies
+        run: bundle install
 #      - name: Run tests
 #        run: bundle exec rake test:f1
 #        working-directory: ./http_server_spec
