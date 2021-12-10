@@ -1,25 +1,101 @@
 package main
 
-import "testing"
+import (
+	"bytes"
+	"fmt"
+	"io/ioutil"
+	"net"
+	"sync"
+	"testing"
+	"time"
+)
 
-// arg1 means argument 1 and arg2 means argument 2, and the expected stands for the 'result we expect'
-type addTest struct {
-	arg1, arg2, expected int
+type MockedConn struct {}
+var testBuffer = make([]byte, 1028)
+
+// Read implements the Conn Read method.
+func (c *MockedConn) Read(b []byte) (int, error) {
+	testBuffer = append(testBuffer, b...)
+	return 0, nil
 }
 
-var addTests = []addTest{
-	addTest{2, 3, 5},
-	addTest{4, 8, 12},
-	addTest{6, 9, 15},
-	addTest{3, 10, 13},
-
+// Write implements the Conn Write method.
+func (c *MockedConn) Write(b []byte) (int, error) {
+	return 0, nil
 }
 
-func TestAdd(t *testing.T){
+// Close closes the connection.
+func (c *MockedConn) Close() error {
+	return nil
+}
 
-	for _, test := range addTests{
-		if output := Add(test.arg1, test.arg2); output != test.expected {
-			t.Errorf("Output %q not equal to expected %q", output, test.expected)
-		}
+type MockedAddr struct {}
+
+func (c *MockedAddr) Network() string {
+	return ""
+}
+
+func (c *MockedAddr) String() string {
+	return ""
+}
+
+func (c *MockedConn) LocalAddr() net.Addr {
+	return &MockedAddr{}
+}
+
+
+func (c *MockedConn) RemoteAddr() net.Addr {
+	return &MockedAddr{}
+}
+
+// SetDeadline implements the Conn SetDeadline method.
+func (c *MockedConn) SetDeadline(t time.Time) error {
+	return nil
+}
+
+// SetReadDeadline implements the Conn SetReadDeadline method.
+func (c *MockedConn) SetReadDeadline(t time.Time) error {
+	return nil
+}
+
+// SetWriteDeadline implements the Conn SetWriteDeadline method.
+func (c *MockedConn) SetWriteDeadline(t time.Time) error {
+	return nil
+}
+
+func ClearTestBuffer() {
+	testBuffer = make([]byte, 1028)
+}
+
+func TestEchoRequestBody(t *testing.T) {
+	testRequest := "GET / HTTP/1.1 Content-Length: 4 test"
+	testPhraseInBytes := []byte(testRequest)
+	wg := &sync.WaitGroup{}
+	wg.Add(1)
+	echoRequestBody(&MockedConn{}, testRequest, wg)
+	if actual := testBuffer; bytes.Compare(testPhraseInBytes, actual) == 0 {
+		t.Fatalf("Unexpected message:\nGot:\t\t%s\nExpected:\t%s\n", actual, testPhraseInBytes)
+		ClearTestBuffer()
 	}
+	return
+	ClearTestBuffer()
+}
+
+func TestConn(t *testing.T) {
+	message := "Hi there!\n"
+
+	server, client := net.Pipe()
+	go func() {
+		client.Write([]byte(message))
+		client.Close()
+	}()
+	buf, err := ioutil.ReadAll(server)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(string(buf[:]))
+	if msg := string(buf[:]); msg != message {
+		t.Fatalf("Unexpected message:\nGot:\t\t%s\nExpected:\t%s\n", msg, message)
+	}
+	return
 }
