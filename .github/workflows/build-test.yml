@@ -58,7 +58,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: yourPrivateOrg/yourPrivateRepo
+          repository: matteeyao/http-server
           token: ${{ secrets.ACCESS_TOKEN }}
           submodules: recursive
       - name: Set up Ruby
