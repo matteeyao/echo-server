@@ -1,14 +1,8 @@
 package main
 
 import (
-	"bufio"
-	"bytes"
-	"fmt"
-	"io"
 	"net/url"
-	"reflect"
 	"strings"
-	"testing"
 )
 
 type reqTest struct {
@@ -398,37 +392,37 @@ var reqTests = []reqTest{
 	},
 }
 
-func TestReadRequest(t *testing.T) {
-	for i := range reqTests {
-		tt := &reqTests[i]
-		req, err := ReadRequest(bufio.NewReader(strings.NewReader(tt.Raw)))
-		if err != nil {
-			if err.Error() != tt.Error {
-				t.Errorf("#%d: error %q, want error %q", i, err.Error(), tt.Error)
-			}
-			continue
-		}
-		rbody := req.Body
-		req.Body = nil
-		testName := fmt.Sprintf("Test %d (%q)", i, tt.Raw)
-		diff(t, testName, req, tt.Req)
-		var bout bytes.Buffer
-		if rbody != nil {
-			_, err := io.Copy(&bout, rbody)
-			if err != nil {
-				t.Fatalf("%s: copying body: %v", testName, err)
-			}
-			rbody.Close()
-		}
-		body := bout.String()
-		if body != tt.Body {
-			t.Errorf("%s: Body = %q want %q", testName, body, tt.Body)
-		}
-		if !reflect.DeepEqual(tt.Trailer, req.Trailer) {
-			t.Errorf("%s: Trailers differ.\n got: %v\nwant: %v", testName, req.Trailer, tt.Trailer)
-		}
-	}
-}
+//func TestReadRequest(t *testing.T) {
+//	for i := range reqTests {
+//		tt := &reqTests[i]
+//		req, err := ReadRequest(bufio.NewReader(strings.NewReader(tt.Raw)))
+//		if err != nil {
+//			if err.Error() != tt.Error {
+//				t.Errorf("#%d: error %q, want error %q", i, err.Error(), tt.Error)
+//			}
+//			continue
+//		}
+//		rbody := req.Body
+//		req.Body = nil
+//		testName := fmt.Sprintf("Test %d (%q)", i, tt.Raw)
+//		diff(t, testName, req, tt.Req)
+//		var bout bytes.Buffer
+//		if rbody != nil {
+//			_, err := io.Copy(&bout, rbody)
+//			if err != nil {
+//				t.Fatalf("%s: copying body: %v", testName, err)
+//			}
+//			rbody.Close()
+//		}
+//		body := bout.String()
+//		if body != tt.Body {
+//			t.Errorf("%s: Body = %q want %q", testName, body, tt.Body)
+//		}
+//		if !reflect.DeepEqual(tt.Trailer, req.Trailer) {
+//			t.Errorf("%s: Trailers differ.\n got: %v\nwant: %v", testName, req.Trailer, tt.Trailer)
+//		}
+//	}
+//}
 
 // reqBytes treats req as a request (with \n delimiters) and returns it with \r\n delimiters,
 // ending in \r\n\r\n
@@ -459,12 +453,12 @@ Content-Length: 5`)},
 Content-Length: 5`)},
 }
 
-func TestReadRequest_Bad(t *testing.T) {
-	for _, tt := range badRequestTests {
-		got, err := ReadRequest(bufio.NewReader(bytes.NewReader(tt.req)))
-		if err == nil {
-			all, err := io.ReadAll(got.Body)
-			t.Errorf("%s: got unexpected request = %#v\n  Body = %q, %v", tt.name, got, all, err)
-		}
-	}
-}
+//func TestReadRequest_Bad(t *testing.T) {
+//	for _, tt := range badRequestTests {
+//		got, err := ReadRequest(bufio.NewReader(bytes.NewReader(tt.req)))
+//		if err == nil {
+//			all, err := io.ReadAll(got.Body)
+//			t.Errorf("%s: got unexpected request = %#v\n  Body = %q, %v", tt.name, got, all, err)
+//		}
+//	}
+//}

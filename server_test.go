@@ -67,7 +67,7 @@ func ClearTestBuffer() {
 	testBuffer = make([]byte, 1028)
 }
 
-func TestEchoRequestBody(t *testing.T) {
+func TestProcessRequest(t *testing.T) {
 	testRequest := "GET / HTTP/1.1 Content-Length: 4 test"
 	testPhraseInBytes := []byte(testRequest)
 	wg := &sync.WaitGroup{}
