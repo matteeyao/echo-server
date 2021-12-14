@@ -73,6 +73,8 @@ To complete this tutorial, you'll need the following:
 
 ## Resources
 
+* [Build Web Application with Golang](https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/)
+
 * [The Go Programming Language](https://learning.oreilly.com/library/view/the-go-programming/9780134190570/) By Alan A. A. Donovan, Brian W. Kernighan
 
 * [Setting up Github actions](https://medium.com/swlh/setting-up-github-actions-for-go-project-ea84f4ed3a40)

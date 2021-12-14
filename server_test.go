@@ -72,7 +72,9 @@ func TestEchoRequestBody(t *testing.T) {
 	testPhraseInBytes := []byte(testRequest)
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
-	echoRequestBody(&MockedConn{}, testRequest, wg)
+	mux := &MyMux{}
+	server := &Server{Addr: "localhost:5000", Handler: mux}
+	server.ProcessRequest(&MockedConn{}, testRequest, wg)
 	if actual := testBuffer; bytes.Compare(testPhraseInBytes, actual) == 0 {
 		t.Fatalf("Unexpected message:\nGot:\t\t%s\nExpected:\t%s\n", actual, testPhraseInBytes)
 		ClearTestBuffer()
