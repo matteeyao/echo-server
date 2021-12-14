@@ -311,11 +311,6 @@ type Request struct {
 	// set, it is undefined whether Cancel is respected.
 	Cancel <-chan struct{}
 
-	// Response is the redirect response which caused this request
-	// to be created. This field is only populated during client
-	// redirects.
-	Response *Response
-
 	// ctx is either the client or server context. It should only
 	// be modified via copying the whole Request using WithContext.
 	// It is unexported to prevent people from using Context wrong
@@ -1094,8 +1089,6 @@ func readRequest(b *bufio.Reader) (req *Request, err error) {
 		req.Host = req.Header.get("Host")
 	}
 
-	fixPragmaCacheControl(req.Header)
-
 	req.Close = shouldClose(req.ProtoMajor, req.ProtoMinor, req.Header, false)
 
 	err = readTransfer(req, b)
@@ -1114,21 +1107,6 @@ func readRequest(b *bufio.Reader) (req *Request, err error) {
 		req.Close = true
 	}
 	return req, nil
-}
-
-// MaxBytesReader is similar to io.LimitReader but is intended for
-// limiting the size of incoming request bodies. In contrast to
-// io.LimitReader, MaxBytesReader's result is a ReadCloser, returns a
-// non-EOF error for a Read beyond the limit, and closes the
-// underlying reader when its Close method is called.
-//
-// MaxBytesReader prevents clients from accidentally or maliciously
-// sending a large request and wasting server resources.
-func MaxBytesReader(w ResponseWriter, r io.ReadCloser, n int64) io.ReadCloser {
-	if n < 0 { // Treat negative limits as equivalent to 0.
-		n = 0
-	}
-	return &maxBytesReader{w: w, r: r, n: n}
 }
 
 type maxBytesReader struct {

@@ -25,5 +25,5 @@ package main
 // the echo_client sees an interrupted response but the server doesn't log
 // an error, panic with the value ErrAbortHandler.
 type Handler interface {
-	ServeHTTP(ResponseWriter, *Request)	// routing implementer
+	ServeHTTP(*Request) string // routing implementer
 }

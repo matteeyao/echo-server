@@ -2,8 +2,6 @@ package main
 
 import (
 	"bufio"
-	"bytes"
-	"io"
 	"log"
 	"net"
 	"strings"
@@ -70,21 +68,8 @@ func (srv *Server) ProcessRequest(c net.Conn, request string, wg *sync.WaitGroup
 	if err != nil {
 		return
 	}
-	//srv.Handler.ServeHTTP(, request)
-
-
-	rbody := req.Body
-	req.Body = nil
-	var bout bytes.Buffer
-	if rbody != nil {
-		_, err := io.Copy(&bout, rbody)
-		if err != nil {
-			log.Fatalf("Request: copying body: %v", err)
-		}
-		rbody.Close()
-	}
-
-	c.Write(bout.Bytes())
+	res := srv.Handler.ServeHTTP(req)
+	c.Write([]byte(res))
 	wg.Done()
 }
 
