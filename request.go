@@ -161,6 +161,4 @@ func readRequest(b *bufio.Reader) (req *Request, err error) {
 		}
 		req.Body += str + "\n"
 	}
-
-	return req, nil
 }
