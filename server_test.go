@@ -74,7 +74,7 @@ func TestProcessRequest(t *testing.T) {
 	wg.Add(1)
 	mux := &MyMux{}
 	server := &Server{Addr: "localhost:5000", Handler: mux}
-	server.ProcessRequest(&MockedConn{}, testRequest, wg)
+	server.ReadRequest(&MockedConn{}, []byte(testRequest), wg)
 	if actual := testBuffer; bytes.Compare(testPhraseInBytes, actual) == 0 {
 		t.Fatalf("Unexpected message:\nGot:\t\t%s\nExpected:\t%s\n", actual, testPhraseInBytes)
 		ClearTestBuffer()

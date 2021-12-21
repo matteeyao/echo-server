@@ -21,7 +21,7 @@ func diff(t *testing.T, prefix string, have, want interface{}) {
 		hf := hv.Field(i).Interface()
 		wf := wv.Field(i).Interface()
 		if !reflect.DeepEqual(hf, wf) {
-			t.Errorf("%s: %s = %v want %v", prefix, name, hf, wf)
+			t.Errorf("%s:\n\n%s (Actual) = %v\r\n%s (Expected) = %v", prefix, name, hf, name, wf)
 		}
 	}
 }
