@@ -29,6 +29,14 @@ func (p *MyMux) ServeHTTP(w *Response, r *Request) string {
 		Redirect(w, r)
 	case "/echo_body":
 		EchoBody(w, r)
+	case "/text_response":
+		TextResponse(w, r)
+	case "/html_response":
+		HTMLResponse(w, r)
+	case "/json_response":
+		JSONResponse(w, r)
+	case "/xml_response":
+		XMLResponse(w, r)
 	default:
 		NotFound(w, r)
 	}

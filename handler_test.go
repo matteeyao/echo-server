@@ -240,3 +240,109 @@ func TestEchoBodyEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
 }
+
+func TestTextResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+
+	expectedBody := "text response"
+	req.Body = expectedBody
+
+	req.Method = "POST"
+	readTransfer(resp, *req)
+	TextResponse(resp, req)
+
+	if resp.StatusCode != StatusOK {
+		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusOK)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+}
+
+func TestHTMLResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+
+	expectedBody := "<html><body><p>HTML Response</p></body></html>"
+	req.Body = expectedBody
+
+	req.Method = "POST"
+	readTransfer(resp, *req)
+	HTMLResponse(resp, req)
+
+	if resp.StatusCode != StatusOK {
+		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusOK)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+}
+
+func TestJSONResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+
+	expectedBody := "{\"key1\":\"value1\",\"key2\":\"value2\"}"
+	req.Body = expectedBody
+
+	req.Method = "POST"
+	readTransfer(resp, *req)
+	JSONResponse(resp, req)
+
+	if resp.StatusCode != StatusOK {
+		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusOK)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := "application/json;charset=utf-8"
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+}
+
+func TestXMLResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+
+	expectedBody := "<note><body>XML Response</body></note>"
+	req.Body = expectedBody
+
+	req.Method = "POST"
+	readTransfer(resp, *req)
+	XMLResponse(resp, req)
+
+	if resp.StatusCode != StatusOK {
+		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusOK)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := "application/xml;charset=utf-8"
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+}
