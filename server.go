@@ -8,18 +8,11 @@ import (
 	"sync"
 )
 
-// A Server defines parameters for running an HTTP server.
-// The zero value for Server is a valid configuration.
 type Server struct {
-	// Addr optionally specifies the TCP address for the server to listen on,
-	// in the form "host:port".
-	Addr string
+	Addr 	string
 	Handler Handler
 }
 
-// ListenAndServe listens on the TCP network address addr and then calls
-// Serve with handler to handle requests on incoming connections.
-// Accepted connections are configured to enable TCP keep-alives.
 func ListenAndServe(addr string, handler Handler) {
 	server := &Server{Addr: addr, Handler: handler}
 	server.ListenAndServe()

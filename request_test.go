@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"go/token"
 	"net/url"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -33,39 +35,25 @@ var noError = ""
 var reqTests = []reqTest{
 	// Baseline test; All Request fields included for template use
 	{
-		"GET http://www.techcrunch.com/ HTTP/1.1\r\n" +
-			"Host: www.techcrunch.com\r\n" +
-			"User-Agent: Fake\r\n" +
-			"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n" +
-			"Accept-Language: en-us,en;q=0.5\r\n" +
-			"Accept-Encoding: gzip,deflate\r\n" +
-			"Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n" +
-			"Keep-Alive: 300\r\n" +
-			"Content-Length: 7\r\n" +
-			"Proxy-Connection: keep-alive\r\n\r\n" +
+		"GET / HTTP/1.1\r\n" +
+			"Host: localhost.com\r\n" +
+			"Accept: text/html\r\n" +
+			"Content-Length: 7\r\n\r\n" +
 			"abcdef\n",
 
 		&Request{
 			Method: "GET",
 			URL: &url.URL{
-				Scheme: "http",
-				Host:   "www.techcrunch.com",
 				Path:   "/",
 			},
 			Proto:      "HTTP/1.1",
 			Header: Header{
-				"Accept":           {"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"},
-				"Accept-Language":  {"en-us,en;q=0.5"},
-				"Accept-Encoding":  {"gzip,deflate"},
-				"Accept-Charset":   {"ISO-8859-1,utf-8;q=0.7,*;q=0.7"},
-				"Keep-Alive":       {"300"},
-				"Proxy-Connection": {"keep-alive"},
+				"Accept":           {"text/html"},
 				"Content-Length":   {"7"},
-				"Host":				{"www.techcrunch.com"},
-				"User-Agent":       {"Fake"},
+				"Host":				{"localhost.com"},
 			},
 			Body: "abcdef\n",
-			RequestURI:    "http://www.techcrunch.com/",
+			RequestURI:    "/",
 		},
 		noError,
 	},
@@ -128,7 +116,7 @@ var reqTests = []reqTest{
 	},
 }
 
-func TestReadRequest(t *testing.T) {
+func TestConvertRawRequestStringToRequestStruct(t *testing.T) {
 	for i := range reqTests {
 		tt := &reqTests[i]
 		req, err := readRequest(bufio.NewReader(strings.NewReader(tt.Raw)))
@@ -139,9 +127,29 @@ func TestReadRequest(t *testing.T) {
 			continue
 		}
 		testName := fmt.Sprintf("Test %d (%q)", i, tt.Raw)
-		diff(t, testName, req, tt.Req)
+		testComparisonOfRequests(t, testName, req, tt.Req)
 		if req.Body != tt.Req.Body {
 			t.Errorf("%s: Body = %q want %q", testName, req.Body, tt.Req.Body)
+		}
+	}
+}
+
+func testComparisonOfRequests(t *testing.T, prefix string, have, want interface{}) {
+	t.Helper()
+	hv := reflect.ValueOf(have).Elem()
+	wv := reflect.ValueOf(want).Elem()
+	if hv.Type() != wv.Type() {
+		t.Errorf("%s: type mismatch %v want %v", prefix, hv.Type(), wv.Type())
+	}
+	for i := 0; i < hv.NumField(); i++ {
+		name := hv.Type().Field(i).Name
+		if !token.IsExported(name) {
+			continue
+		}
+		hf := hv.Field(i).Interface()
+		wf := wv.Field(i).Interface()
+		if !reflect.DeepEqual(hf, wf) {
+			t.Errorf("%s:\n\n%s (Actual) = %v\r\n%s (Expected) = %v", prefix, name, hf, name, wf)
 		}
 	}
 }

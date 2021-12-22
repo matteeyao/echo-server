@@ -15,3 +15,5 @@
 # vendor/
 
 .http_server_spec/Gemfile.lock
+
+.DS_Store
