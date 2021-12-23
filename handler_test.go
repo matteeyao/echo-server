@@ -10,7 +10,7 @@ import (
 func TestApplyStatusToResponse(t *testing.T) {
 	resp := new(Response)
 
-	if ApplyStatusToResponse(resp, StatusOK); resp.StatusCode != StatusOK {
+	if applyStatusToResponse(resp, StatusOK); resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
 	}
 
@@ -39,7 +39,7 @@ func TestHeadRequestWithGetMethodEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
 	req.Method = "GET"
 	readTransfer(resp, *req)
-	HeadRequest(resp, req)
+	headRequest(resp, req)
 
 	if resp.StatusCode != StatusMethodNotAllowed {
 		t.Errorf("expected %d, got %d", StatusMethodNotAllowed, resp.StatusCode)
@@ -63,7 +63,7 @@ func TestHeadRequestWithoutGetMethodEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
 	req.Method = "HEAD"
 	readTransfer(resp, *req)
-	HeadRequest(resp, req)
+	headRequest(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -78,7 +78,7 @@ func TestHeadRequestWithoutGetMethodEndpoint(t *testing.T) {
 func TestNotFoundEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
 	readTransfer(resp, *req)
-	NotFound(resp, req)
+	notFound(resp, req)
 
 	if resp.StatusCode != StatusNotFound {
 		t.Errorf("expected %d, got %d", StatusNotFound, resp.StatusCode)
@@ -93,7 +93,7 @@ func TestNotFoundEndpoint(t *testing.T) {
 func TestSimpleGetEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
 	readTransfer(resp, *req)
-	SimpleGet(resp, req)
+	simpleGet(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -108,7 +108,7 @@ func TestSimpleGetEndpoint(t *testing.T) {
 func TestSimpleGetWithBodyEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
 	readTransfer(resp, *req)
-	SimpleGetWithBody(resp, req)
+	simpleGetWithBody(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -128,7 +128,7 @@ func TestSimpleGetWithBodyEndpoint(t *testing.T) {
 func TestSimpleHeadEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
 	readTransfer(resp, *req)
-	SimpleHead(resp, req)
+	simpleHead(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -144,7 +144,7 @@ func TestMethodOptionsEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
 	req.Method = "GET"
 	readTransfer(resp, *req)
-	MethodOptions(resp, req)
+	methodOptions(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -168,7 +168,7 @@ func TestMethodOptions2Endpoint(t *testing.T) {
 	req, resp := &req, new(Response)
 	req.Method = "GET"
 	readTransfer(resp, *req)
-	MethodOptions2(resp, req)
+	methodOptions2(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -192,7 +192,7 @@ func TestRedirectEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
 	req.Method = "GET"
 	readTransfer(resp, *req)
-	Redirect(resp, req)
+	redirect(resp, req)
 
 	if resp.StatusCode != StatusMovedPermanently {
 		t.Errorf("expected %d, got %d", StatusMovedPermanently, resp.StatusCode)
@@ -225,7 +225,7 @@ func TestEchoBodyEndpoint(t *testing.T) {
 
 	req.Method = "POST"
 	readTransfer(resp, *req)
-	EchoBody(resp, req)
+	echoBody(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -249,7 +249,7 @@ func TestTextResponseEndpoint(t *testing.T) {
 
 	req.Method = "POST"
 	readTransfer(resp, *req)
-	TextResponse(resp, req)
+	textResponse(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -267,13 +267,9 @@ func TestTextResponseEndpoint(t *testing.T) {
 
 func TestHTMLResponseEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
-
-	expectedBody := "<html><body><p>HTML Response</p></body></html>"
-	req.Body = expectedBody
-
 	req.Method = "POST"
 	readTransfer(resp, *req)
-	HTMLResponse(resp, req)
+	htmlResponse(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -284,6 +280,7 @@ func TestHTMLResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
 	}
 
+	expectedBody := "<html><body><p>HTML Response</p></body></html>"
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
@@ -291,13 +288,9 @@ func TestHTMLResponseEndpoint(t *testing.T) {
 
 func TestJSONResponseEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
-
-	expectedBody := "{\"key1\":\"value1\",\"key2\":\"value2\"}"
-	req.Body = expectedBody
-
 	req.Method = "POST"
 	readTransfer(resp, *req)
-	JSONResponse(resp, req)
+	jsonResponse(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -313,6 +306,7 @@ func TestJSONResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
 	}
 
+	expectedBody := "{\"key1\":\"value1\",\"key2\":\"value2\"}"
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
@@ -320,13 +314,9 @@ func TestJSONResponseEndpoint(t *testing.T) {
 
 func TestXMLResponseEndpoint(t *testing.T) {
 	req, resp := &req, new(Response)
-
-	expectedBody := "<note><body>XML Response</body></note>"
-	req.Body = expectedBody
-
 	req.Method = "POST"
 	readTransfer(resp, *req)
-	XMLResponse(resp, req)
+	xmlResponse(resp, req)
 
 	if resp.StatusCode != StatusOK {
 		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
@@ -342,6 +332,7 @@ func TestXMLResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
 	}
 
+	expectedBody := "<note><body>XML Response</body></note>"
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
