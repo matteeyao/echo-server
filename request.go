@@ -8,11 +8,13 @@ import (
 	"sync"
 )
 
+// A Request represents an HTTP request received by a server
+// or to be sent by a client.
 type Request struct {
 	Method 		string
 	URL 		*url.URL
 	Proto		string
-	Header 		Header
+	Header 		header
 	Body 		string
 	RequestURI 	string
 }
@@ -77,7 +79,7 @@ func readRequest(b *bufio.Reader) (req *Request, err error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header = Header(MIMEHeader)
+	req.Header = header(MIMEHeader)
 
 	// Body
 	for {

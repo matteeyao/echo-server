@@ -47,7 +47,7 @@ var reqTests = []reqTest{
 				Path:   "/",
 			},
 			Proto:      "HTTP/1.1",
-			Header: Header{
+			Header: header{
 				"Accept":           {"text/html"},
 				"Content-Length":   {"7"},
 				"Host":				{"localhost.com"},
@@ -69,8 +69,8 @@ var reqTests = []reqTest{
 				Path: "/",
 			},
 			Proto:         "HTTP/1.1",
-			Header:        Header{
-				"Host":				{"foo.com"},
+			Header:        header{
+				"Host":	   {"foo.com"},
 			},
 			Body:		   "",
 			RequestURI:    "/",
@@ -90,8 +90,8 @@ var reqTests = []reqTest{
 				Path: "//user@host/is/actually/a/path/",
 			},
 			Proto:         "HTTP/1.1",
-			Header:        Header{
-				"Host":				{"test"},
+			Header:        header{
+				"Host":	   {"test"},
 			},
 			Body:		   "",
 			RequestURI:    "//user@host/is/actually/a/path/",

@@ -2,36 +2,58 @@ package main
 
 import "net/textproto"
 
-type Header map[string][]string
+type header map[string][]string
 
-func (h Header) Add(key, value string) {
+// Add adds the key, value pair to the header.
+// It appends to any existing values associated with key.
+// The key is case insensitive; it is canonicalized by
+// CanonicalHeaderKey.
+func (h header) Add(key, value string) {
 	textproto.MIMEHeader(h).Add(key, value)
 }
 
-func (h Header) Set(key, value string) {
+// Set sets the header entries associated with key to the
+// single element value. It replaces any existing values
+// associated with key. The key is case insensitive; it is
+// canonicalized by textproto.CanonicalMIMEHeaderKey.
+// To use non-canonical keys, assign to the map directly.
+func (h header) Set(key, value string) {
 	textproto.MIMEHeader(h).Set(key, value)
 }
 
-func (h Header) Get(key string) string {
+// Get gets the first value associated with the given key. If
+// there are no values associated with the key, Get returns "".
+// It is case insensitive; textproto.CanonicalMIMEHeaderKey is
+// used to canonicalize the provided key. To use non-canonical keys,
+// access the map directly.
+func (h header) Get(key string) string {
 	return textproto.MIMEHeader(h).Get(key)
 }
 
-func (h Header) Values(key string) []string {
+// Values returns all values associated with the given key.
+// It is case insensitive; textproto.CanonicalMIMEHeaderKey is
+// used to canonicalize the provided key. To use non-canonical
+// keys, access the map directly.
+// The returned slice is not a copy.
+func (h header) Values(key string) []string {
 	return textproto.MIMEHeader(h).Values(key)
 }
 
-func (h Header) get(key string) string {
+func (h header) get(key string) string {
 	if v := h[key]; len(v) > 0 {
 		return v[0]
 	}
 	return ""
 }
 
-func (h Header) has(key string) bool {
+func (h header) has(key string) bool {
 	_, ok := h[key]
 	return ok
 }
 
-func (h Header) Del(key string) {
+// Del deletes the values associated with key.
+// The key is case insensitive; it is canonicalized by
+// CanonicalHeaderKey.
+func (h header) Del(key string) {
 	textproto.MIMEHeader(h).Del(key)
 }
