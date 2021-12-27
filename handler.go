@@ -1,6 +1,6 @@
 package main
 
-type Handler interface {
+type handler interface {
 	ServeHTTP(*Response, *Request) string
 }
 

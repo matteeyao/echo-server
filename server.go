@@ -10,10 +10,10 @@ import (
 
 type Server struct {
 	Addr 	string
-	Handler Handler
+	Handler handler
 }
 
-func ListenAndServe(addr string, handler Handler) {
+func ListenAndServe(addr string, handler handler) {
 	server := &Server{Addr: addr, Handler: handler}
 	server.ListenAndServe()
 }

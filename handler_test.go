@@ -27,7 +27,7 @@ var req Request = Request{
 		Path:   "/",
 	},
 	Proto: "HTTP/1.1",
-	Header: Header{
+	Header: header{
 		"Accept":           {"text/html"},
 		"Host":             {"localhost.com"},
 		"User-Agent":       {"Fake"},
