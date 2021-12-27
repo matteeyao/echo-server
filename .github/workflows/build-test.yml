@@ -26,7 +26,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.17.2' # The Go version to download (if necessary) and use.
+          go-version: '1.17.0-rc2' # The Go version to download (if necessary) and use.
 
       # Install all the dependencies
       - name: Install dependencies
@@ -62,7 +62,7 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           submodules: recursive
       - name: Set up Ruby
-        uses: ruby/setup-ruby@477b21f02be01bcb8030d50f37cfec92bfa615b6
+        uses: actions/setup-ruby@v1
         with:
           # Not needed with a .ruby-version file
           ruby-version: 2.5.1
