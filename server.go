@@ -8,17 +8,17 @@ import (
 	"sync"
 )
 
-type Server struct {
+type server struct {
 	Addr 	string
 	Handler handler
 }
 
-func ListenAndServe(addr string, handler handler) {
-	server := &Server{Addr: addr, Handler: handler}
-	server.ListenAndServe()
+func listenAndServe(addr string, handler handler) {
+	server := &server{Addr: addr, Handler: handler}
+	server.listenAndServe()
 }
 
-func (srv *Server) ListenAndServe() {
+func (srv *server) listenAndServe() {
 	ln, err := net.Listen("tcp", srv.Addr)
 	if err != nil {
 		log.Fatal(err)
@@ -34,7 +34,7 @@ func (srv *Server) ListenAndServe() {
 	}
 }
 
-func (srv *Server) handleConn(c net.Conn) {
+func (srv *server) handleConn(c net.Conn) {
 	wg := &sync.WaitGroup{}
 	request := make([]byte, 1028)
 	readLength, err := c.Read(request)
@@ -47,7 +47,8 @@ func (srv *Server) handleConn(c net.Conn) {
 	c.Close()
 }
 
-func (srv *Server) ReadRequest(c net.Conn, request []byte, wg *sync.WaitGroup) {
+// ReadRequest reads and parses an incoming request from b.
+func (srv *server) ReadRequest(c net.Conn, request []byte, wg *sync.WaitGroup) {
 	req, err := readRequest(bufio.NewReader(bytes.NewReader(request)))
 	if err != nil {
 		return

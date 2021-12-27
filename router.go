@@ -5,11 +5,12 @@ import (
 	"strings"
 )
 
+// NoBody is an empty string body
 var NoBody = ""
 
-type MyMux struct {}
+type myMux struct {}
 
-func (p *MyMux) ServeHTTP(w *Response, r *Request) string {
+func (p *myMux) ServeHTTP(w *Response, r *Request) string {
 	readTransfer(w, *r)
 
 	switch r.URL.Path {

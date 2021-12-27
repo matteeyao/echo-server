@@ -38,6 +38,6 @@ func main() {
 	port := viperEnvVariable("server.port")
 	address := host + ":" + port
 
-	mux := &MyMux{}
-	ListenAndServe(address, mux)
+	mux := &myMux{}
+	listenAndServe(address, mux)
 }
