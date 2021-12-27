@@ -105,4 +105,34 @@ func xmlResponse(w *Response, r *Request) {
 	w.Body = expectedBody
 }
 
+func kittehResponse(w *Response, r *Request) {
+	applyStatusToResponse(w, StatusOK)
+	w.Header.Del("Content-Type")
+	w.Header.Add("Content-Type", "image/jpeg")
+	expectedBody := "test body"
+	w.Body = expectedBody
+}
 
+func doggoResponse(w *Response, r *Request) {
+	applyStatusToResponse(w, StatusOK)
+	w.Header.Del("Content-Type")
+	w.Header.Add("Content-Type", "image/png")
+	expectedBody := "test body"
+	w.Body = expectedBody
+}
+
+func kissesResponse(w *Response, r *Request) {
+	applyStatusToResponse(w, StatusOK)
+	w.Header.Del("Content-Type")
+	w.Header.Add("Content-Type", "image/gif")
+	expectedBody := "test body"
+	w.Body = expectedBody
+}
+
+func healthCheckResponse(w *Response, r *Request) {
+	applyStatusToResponse(w, StatusOK)
+	w.Header.Del("Content-Type")
+	w.Header.Add("Content-Type", "text/html;charset=utf-8")
+	expectedBody := "<html><body><<strong>Status:</strong> pass</body></html>"
+	w.Body = expectedBody
+}
