@@ -1,6 +1,9 @@
 package main
 
-import "net/textproto"
+import (
+	"net/textproto"
+	"strings"
+)
 
 type header map[string][]string
 
@@ -9,6 +12,9 @@ type header map[string][]string
 // The key is case insensitive; it is canonicalized by
 // CanonicalHeaderKey.
 func (h header) Add(key, value string) {
+	if strings.Compare(key, "Content-Type") == 0 {
+		textproto.MIMEHeader(h).Del(key)
+	}
 	textproto.MIMEHeader(h).Add(key, value)
 }
 
