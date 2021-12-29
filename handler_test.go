@@ -56,7 +56,6 @@ func TestHeadRequestWithGetMethodEndpoint(t *testing.T) {
 	}
 
 	resp.Header.Del("ALLOW")
-	return
 }
 
 func TestHeadRequestWithoutGetMethodEndpoint(t *testing.T) {
@@ -211,7 +210,7 @@ func TestRedirectEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedLocationHeader, actualLocationHeader)
 	}
 
-	clearResponse(resp)
+	resp.Header.Del("Location")
 }
 
 func TestEchoBodyEndpoint(t *testing.T) {
