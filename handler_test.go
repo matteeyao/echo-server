@@ -337,3 +337,107 @@ func TestXMLResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
 }
+
+func TestKittehResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "POST"
+	readTransfer(resp, *req)
+	kittehResponse(resp, req)
+
+	if resp.StatusCode != StatusOK {
+		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusOK)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := "image/jpeg"
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := "test body"
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+}
+
+func TestDoggoResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "POST"
+	readTransfer(resp, *req)
+	doggoResponse(resp, req)
+
+	if resp.StatusCode != StatusOK {
+		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusOK)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := "image/png"
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := "test body"
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+}
+
+func TestKissesResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "POST"
+	readTransfer(resp, *req)
+	kissesResponse(resp, req)
+
+	if resp.StatusCode != StatusOK {
+		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusOK)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := "image/gif"
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := "test body"
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+}
+
+func TestHealthCheckResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "POST"
+	readTransfer(resp, *req)
+	healthCheckResponse(resp, req)
+
+	if resp.StatusCode != StatusOK {
+		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusOK)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := "text/html;charset=utf-8"
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := "<html><body><<strong>Status:</strong> pass</body></html>"
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+}

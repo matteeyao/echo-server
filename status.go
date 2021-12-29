@@ -1,5 +1,6 @@
 package main
 
+// HTTP status codes as registered with IANA.
 const (
 	StatusOK                   	= 200 // RFC 7231, 6.3.1
 	StatusCreated             	= 201 // RFC 7231, 6.3.2
