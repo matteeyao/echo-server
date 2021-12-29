@@ -130,3 +130,45 @@ func healthCheckResponse(w *Response, r *Request) {
 	expectedBody := "<html><body><<strong>Status:</strong> pass</body></html>"
 	w.Body = expectedBody
 }
+
+func todoResponse(w *Response, r *Request) {
+	switch r.Method {
+	case "POST":
+		switch r.Header.Get("Content-Type") {
+		case "application/x-www-form-urlencoded":
+			clearResponse(w)
+			applyStatusToResponse(w, StatusBadRequest)
+		case "text/xml; charset=utf-8":
+			clearResponse(w)
+			applyStatusToResponse(w, StatusUnsupportedMediaType)
+		default:
+			applyStatusToResponse(w, StatusCreated)
+			w.Header.Add("Content-Type", "application/json;charset=utf-8")
+		}
+	}
+}
+
+func clearResponse(w *Response) {
+	w.Header = *new(header)
+	w.Body = ""
+}
+
+func handleTodoResponse(w *Response, r *Request) {
+	switch r.Method {
+	case "PUT":
+		switch r.Header.Get("Content-Type") {
+		case "text/xml":
+			clearResponse(w)
+			applyStatusToResponse(w, StatusUnsupportedMediaType)
+		case "application/x-www-form-urlencoded":
+			clearResponse(w)
+			applyStatusToResponse(w, StatusBadRequest)
+		default:
+			applyStatusToResponse(w, StatusOK)
+			w.Header.Add("Content-Type", "application/json;charset=utf-8")
+		}
+	case "DELETE":
+		clearResponse(w)
+		applyStatusToResponse(w, StatusNoContent)
+	}
+}

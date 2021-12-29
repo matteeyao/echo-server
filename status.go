@@ -8,6 +8,7 @@ const (
 
 	StatusMovedPermanently  	= 301 // RFC 7231, 6.4.2
 
+	StatusBadRequest                   = 400 // RFC 7231, 6.5.1
 	StatusNotFound              = 404 // RFC 7231, 6.5.4
 	StatusMethodNotAllowed      = 405 // RFC 7231, 6.5.5
 	StatusUnsupportedMediaType  = 415 // RFC 7231, 6.5.13
@@ -20,6 +21,7 @@ var statusText = map[int]string{
 
 	StatusMovedPermanently:  	"Moved Permanently",
 
+	StatusBadRequest:           "Bad Request",
 	StatusNotFound:             "Not Found",
 	StatusMethodNotAllowed:     "Method Not Allowed",
 	StatusUnsupportedMediaType: "Unsupported Media Type",
