@@ -106,21 +106,21 @@ func xmlResponse(w *Response, r *Request) {
 func kittehResponse(w *Response, r *Request) {
 	applyStatusToResponse(w, StatusOK)
 	w.Header.Add("Content-Type", "image/jpeg")
-	expectedBody := "test body"
+	expectedBody := "image/jpeg"
 	w.Body = expectedBody
 }
 
 func doggoResponse(w *Response, r *Request) {
 	applyStatusToResponse(w, StatusOK)
 	w.Header.Add("Content-Type", "image/png")
-	expectedBody := "test body"
+	expectedBody := "image/png"
 	w.Body = expectedBody
 }
 
 func kissesResponse(w *Response, r *Request) {
 	applyStatusToResponse(w, StatusOK)
 	w.Header.Add("Content-Type", "image/gif")
-	expectedBody := "test body"
+	expectedBody := "image/gif"
 	w.Body = expectedBody
 }
 

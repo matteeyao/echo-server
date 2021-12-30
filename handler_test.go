@@ -364,7 +364,7 @@ func TestKittehResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
 	}
 
-	expectedBody := "test body"
+	expectedBody := expectedContentTypeHeader
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
@@ -392,7 +392,7 @@ func TestDoggoResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
 	}
 
-	expectedBody := "test body"
+	expectedBody := expectedContentTypeHeader
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
@@ -420,7 +420,7 @@ func TestKissesResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
 	}
 
-	expectedBody := "test body"
+	expectedBody := expectedContentTypeHeader
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
