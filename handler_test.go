@@ -56,7 +56,6 @@ func TestHeadRequestWithGetMethodEndpoint(t *testing.T) {
 	}
 
 	resp.Header.Del("ALLOW")
-	return
 }
 
 func TestHeadRequestWithoutGetMethodEndpoint(t *testing.T) {
@@ -161,7 +160,6 @@ func TestMethodOptionsEndpoint(t *testing.T) {
 	}
 
 	resp.Header.Del("ALLOW")
-	return
 }
 
 func TestMethodOptions2Endpoint(t *testing.T) {
@@ -185,7 +183,6 @@ func TestMethodOptions2Endpoint(t *testing.T) {
 	}
 
 	resp.Header.Del("ALLOW")
-	return
 }
 
 func TestRedirectEndpoint(t *testing.T) {
@@ -214,7 +211,6 @@ func TestRedirectEndpoint(t *testing.T) {
 	}
 
 	resp.Header.Del("Location")
-	return
 }
 
 func TestEchoBodyEndpoint(t *testing.T) {
@@ -239,6 +235,8 @@ func TestEchoBodyEndpoint(t *testing.T) {
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
+
+	clearResponse(resp)
 }
 
 func TestTextResponseEndpoint(t *testing.T) {
@@ -263,6 +261,8 @@ func TestTextResponseEndpoint(t *testing.T) {
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
+
+	clearResponse(resp)
 }
 
 func TestHTMLResponseEndpoint(t *testing.T) {
@@ -284,6 +284,8 @@ func TestHTMLResponseEndpoint(t *testing.T) {
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
+
+	clearResponse(resp)
 }
 
 func TestJSONResponseEndpoint(t *testing.T) {
@@ -310,6 +312,8 @@ func TestJSONResponseEndpoint(t *testing.T) {
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
+
+	clearResponse(resp)
 }
 
 func TestXMLResponseEndpoint(t *testing.T) {
@@ -336,6 +340,8 @@ func TestXMLResponseEndpoint(t *testing.T) {
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
+
+	clearResponse(resp)
 }
 
 func TestKittehResponseEndpoint(t *testing.T) {
@@ -358,10 +364,12 @@ func TestKittehResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
 	}
 
-	expectedBody := "test body"
+	expectedBody := expectedContentTypeHeader
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
+
+	clearResponse(resp)
 }
 
 func TestDoggoResponseEndpoint(t *testing.T) {
@@ -384,10 +392,12 @@ func TestDoggoResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
 	}
 
-	expectedBody := "test body"
+	expectedBody := expectedContentTypeHeader
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
+
+	clearResponse(resp)
 }
 
 func TestKissesResponseEndpoint(t *testing.T) {
@@ -410,10 +420,12 @@ func TestKissesResponseEndpoint(t *testing.T) {
 		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
 	}
 
-	expectedBody := "test body"
+	expectedBody := expectedContentTypeHeader
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
+
+	clearResponse(resp)
 }
 
 func TestHealthCheckResponseEndpoint(t *testing.T) {
@@ -440,4 +452,210 @@ func TestHealthCheckResponseEndpoint(t *testing.T) {
 	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
 		t.Errorf("expected %s, got %s", expectedBody, actualBody)
 	}
+
+	clearResponse(resp)
+}
+
+func TestSuccessfulCreateTodoResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "POST"
+	req.Header.Add("Content-Type", "application/json")
+	req.Body = "{\"task\":\"a new task\"}"
+	readTransfer(resp, *req)
+	todoResponse(resp, req)
+
+	if resp.StatusCode != StatusCreated {
+		t.Errorf("expected %d, got %d", StatusCreated, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusCreated)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := "application/json;charset=utf-8"
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := req.Body
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+
+	clearResponse(resp)
+}
+
+func TestCreateTodoWithUnsupportedMediaTypeResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "POST"
+	req.Header.Add("Content-Type", "text/xml; charset=utf-8")
+	readTransfer(resp, *req)
+	todoResponse(resp, req)
+
+	if resp.StatusCode != StatusUnsupportedMediaType {
+		t.Errorf("expected %d, got %d", StatusUnsupportedMediaType, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusUnsupportedMediaType)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := ""
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := ""
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+
+	clearResponse(resp)
+}
+
+func TestCreateTodoWithBadRequestResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "POST"
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	readTransfer(resp, *req)
+	todoResponse(resp, req)
+
+	if resp.StatusCode != StatusBadRequest {
+		t.Errorf("expected %d, got %d", StatusBadRequest, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusBadRequest)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := ""
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := ""
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+
+	clearResponse(resp)
+}
+
+func TestSuccessfulUpdateTodoResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "PUT"
+	expectedContentTypeHeader := "application/json;charset=utf-8"
+	req.Header.Add("Content-Type", expectedContentTypeHeader)
+	expectedBody := "{\"task\":\"an updated task\"}"
+	req.Body = expectedBody
+	readTransfer(resp, *req)
+	handleTodoResponse(resp, req)
+
+	if resp.StatusCode != StatusOK {
+		t.Errorf("expected %d, got %d", StatusOK, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusOK)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+
+	clearResponse(resp)
+}
+
+func TestUpdateTodoWithUnsupportedMediaTypeResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "POST"
+	req.Header.Add("Content-Type", "text/xml; charset=utf-8")
+	readTransfer(resp, *req)
+	todoResponse(resp, req)
+
+	if resp.StatusCode != StatusUnsupportedMediaType {
+		t.Errorf("expected %d, got %d", StatusUnsupportedMediaType, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusUnsupportedMediaType)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := ""
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := ""
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+
+	clearResponse(resp)
+}
+
+func TestUpdateTodoWithBadRequestResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "POST"
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	readTransfer(resp, *req)
+	todoResponse(resp, req)
+
+	if resp.StatusCode != StatusBadRequest {
+		t.Errorf("expected %d, got %d", StatusBadRequest, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusBadRequest)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := ""
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := ""
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+
+	clearResponse(resp)
+}
+
+func TestDeleteTodoResponseEndpoint(t *testing.T) {
+	req, resp := &req, new(Response)
+	req.Method = "DELETE"
+	readTransfer(resp, *req)
+	handleTodoResponse(resp, req)
+
+	if resp.StatusCode != StatusNoContent {
+		t.Errorf("expected %d, got %d", StatusNoContent, resp.StatusCode)
+	}
+
+	expectedStatus := StatusText(StatusNoContent)
+	if resp.Status != expectedStatus {
+		t.Errorf("expected %s, got %s", expectedStatus, resp.Status)
+	}
+
+	expectedContentTypeHeader := ""
+	if actualContentTypeHeader := resp.Header.Get("Content-Type"); strings.Compare(actualContentTypeHeader, expectedContentTypeHeader) != 0 {
+		t.Errorf("expected %s, got %s", expectedContentTypeHeader, actualContentTypeHeader)
+	}
+
+	expectedBody := ""
+	if actualBody := resp.Body; strings.Compare(actualBody, expectedBody) != 0 {
+		t.Errorf("expected %s, got %s", expectedBody, actualBody)
+	}
+
+	clearResponse(resp)
 }

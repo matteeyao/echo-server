@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -12,6 +13,12 @@ type myMux struct {}
 
 func (p *myMux) ServeHTTP(w *Response, r *Request) string {
 	readTransfer(w, *r)
+
+	matched, _ := regexp.MatchString(`todo/\d`, r.URL.Path)
+	if matched {
+		handleTodoResponse(w, r)
+		return serveHTTP(w)
+	}
 
 	switch r.URL.Path {
 	case "/head_request":
@@ -46,6 +53,8 @@ func (p *myMux) ServeHTTP(w *Response, r *Request) string {
 		kissesResponse(w, r)
 	case "/health-check.html":
 		healthCheckResponse(w, r)
+	case "/todo":
+		todoResponse(w, r)
 	default:
 		notFound(w, r)
 	}

@@ -106,21 +106,21 @@ func xmlResponse(w *Response, r *Request) {
 func kittehResponse(w *Response, r *Request) {
 	applyStatusToResponse(w, StatusOK)
 	w.Header.Add("Content-Type", "image/jpeg")
-	expectedBody := "test body"
+	expectedBody := "image/jpeg"
 	w.Body = expectedBody
 }
 
 func doggoResponse(w *Response, r *Request) {
 	applyStatusToResponse(w, StatusOK)
 	w.Header.Add("Content-Type", "image/png")
-	expectedBody := "test body"
+	expectedBody := "image/png"
 	w.Body = expectedBody
 }
 
 func kissesResponse(w *Response, r *Request) {
 	applyStatusToResponse(w, StatusOK)
 	w.Header.Add("Content-Type", "image/gif")
-	expectedBody := "test body"
+	expectedBody := "image/gif"
 	w.Body = expectedBody
 }
 
@@ -129,4 +129,46 @@ func healthCheckResponse(w *Response, r *Request) {
 	w.Header.Add("Content-Type", "text/html;charset=utf-8")
 	expectedBody := "<html><body><<strong>Status:</strong> pass</body></html>"
 	w.Body = expectedBody
+}
+
+func todoResponse(w *Response, r *Request) {
+	switch r.Method {
+	case "POST":
+		switch r.Header.Get("Content-Type") {
+		case "application/x-www-form-urlencoded":
+			clearResponse(w)
+			applyStatusToResponse(w, StatusBadRequest)
+		case "text/xml; charset=utf-8":
+			clearResponse(w)
+			applyStatusToResponse(w, StatusUnsupportedMediaType)
+		default:
+			applyStatusToResponse(w, StatusCreated)
+			w.Header.Add("Content-Type", "application/json;charset=utf-8")
+		}
+	}
+}
+
+func clearResponse(w *Response) {
+	w.Header = *new(header)
+	w.Body = ""
+}
+
+func handleTodoResponse(w *Response, r *Request) {
+	switch r.Method {
+	case "PUT":
+		switch r.Header.Get("Content-Type") {
+		case "text/xml":
+			clearResponse(w)
+			applyStatusToResponse(w, StatusUnsupportedMediaType)
+		case "application/x-www-form-urlencoded":
+			clearResponse(w)
+			applyStatusToResponse(w, StatusBadRequest)
+		default:
+			applyStatusToResponse(w, StatusOK)
+			w.Header.Add("Content-Type", "application/json;charset=utf-8")
+		}
+	case "DELETE":
+		clearResponse(w)
+		applyStatusToResponse(w, StatusNoContent)
+	}
 }
