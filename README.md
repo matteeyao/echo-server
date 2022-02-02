@@ -5,7 +5,7 @@
 From a command prompt, run the `main.go` file using the command:
 
 ```zsh
-$ go run main.go
+$ go run .
 ```
 
 or
