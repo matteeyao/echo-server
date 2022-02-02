@@ -8,12 +8,6 @@ From a command prompt, run the `main.go` file using the command:
 $ go run .
 ```
 
-or
-
-```zsh
-$ go run .
-```
-
 To determine whether the unit tests are passing or failing run:
 
 ```zsh
